@@ -68,6 +68,23 @@ func (s *BackendService) GetVeterinarians(request *protos.VetRequest, stream pro
 	return nil
 }
 
+func (s *BackendService) GetVeterinariansInLocation(location *protos.Location, stream protos.VetsBackend_GetVeterinariansInLocationServer) error {
+	var dbVets []models.Veterinary
+
+	s.db.Conn.Where("latitude < ?", location.Lat).Find(&dbVets) //TODO USE SOMETHING LIKE DISTANCE VECTOR API HERE
+
+	for _, dbVet := range dbVets {
+		var services []*protos.VetService
+		services = fetchServices(s, int(dbVet.ID))
+		vet := &protos.Veterinary{VetId: int32(dbVet.ID), Title: dbVet.Title, FirstName: dbVet.FirstName, LastName: dbVet.LastName, Email: dbVet.Email, Phone: dbVet.Phone, Address: &protos.Location{Lat: dbVet.Latitude, Long: dbVet.Longitude, Address: dbVet.Address}, Summary: "", Services: services}
+		if err := stream.Send(vet); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (s *BackendService) CreateVeterian(ctx context.Context, vet *protos.Veterinary) (*protos.Veterinary, error) {
 	dbVet := &models.Veterinary{FirstName: vet.FirstName, LastName: vet.LastName, Email: vet.Email, Phone: vet.Phone, Address: vet.Address.Address, Longitude: vet.Address.Long, Latitude: vet.Address.Lat}
 

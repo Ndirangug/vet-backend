@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type VetsBackendClient interface {
 	TestHello(ctx context.Context, in *TestHelloRequest, opts ...grpc.CallOption) (*TestHelloResponse, error)
 	GetVeterinarians(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansClient, error)
+	GetVeterinariansInLocation(ctx context.Context, in *Location, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansInLocationClient, error)
 	GetVeterinarian(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (*Veterinary, error)
 	UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error)
 	UpdateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error)
@@ -71,6 +72,38 @@ type vetsBackendGetVeterinariansClient struct {
 }
 
 func (x *vetsBackendGetVeterinariansClient) Recv() (*Veterinary, error) {
+	m := new(Veterinary)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *vetsBackendClient) GetVeterinariansInLocation(ctx context.Context, in *Location, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansInLocationClient, error) {
+	stream, err := c.cc.NewStream(ctx, &VetsBackend_ServiceDesc.Streams[1], "/vet_backend.VetsBackend/GetVeterinariansInLocation", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &vetsBackendGetVeterinariansInLocationClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type VetsBackend_GetVeterinariansInLocationClient interface {
+	Recv() (*Veterinary, error)
+	grpc.ClientStream
+}
+
+type vetsBackendGetVeterinariansInLocationClient struct {
+	grpc.ClientStream
+}
+
+func (x *vetsBackendGetVeterinariansInLocationClient) Recv() (*Veterinary, error) {
 	m := new(Veterinary)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -147,6 +180,7 @@ func (c *vetsBackendClient) ScheduleSession(ctx context.Context, in *TreatmentSe
 type VetsBackendServer interface {
 	TestHello(context.Context, *TestHelloRequest) (*TestHelloResponse, error)
 	GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error
+	GetVeterinariansInLocation(*Location, VetsBackend_GetVeterinariansInLocationServer) error
 	GetVeterinarian(context.Context, *VetRequest) (*Veterinary, error)
 	UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error)
 	UpdateFarmer(context.Context, *Farmer) (*Farmer, error)
@@ -166,6 +200,9 @@ func (UnimplementedVetsBackendServer) TestHello(context.Context, *TestHelloReque
 }
 func (UnimplementedVetsBackendServer) GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetVeterinarians not implemented")
+}
+func (UnimplementedVetsBackendServer) GetVeterinariansInLocation(*Location, VetsBackend_GetVeterinariansInLocationServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetVeterinariansInLocation not implemented")
 }
 func (UnimplementedVetsBackendServer) GetVeterinarian(context.Context, *VetRequest) (*Veterinary, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVeterinarian not implemented")
@@ -237,6 +274,27 @@ type vetsBackendGetVeterinariansServer struct {
 }
 
 func (x *vetsBackendGetVeterinariansServer) Send(m *Veterinary) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _VetsBackend_GetVeterinariansInLocation_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Location)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(VetsBackendServer).GetVeterinariansInLocation(m, &vetsBackendGetVeterinariansInLocationServer{stream})
+}
+
+type VetsBackend_GetVeterinariansInLocationServer interface {
+	Send(*Veterinary) error
+	grpc.ServerStream
+}
+
+type vetsBackendGetVeterinariansInLocationServer struct {
+	grpc.ServerStream
+}
+
+func (x *vetsBackendGetVeterinariansInLocationServer) Send(m *Veterinary) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -410,6 +468,11 @@ var VetsBackend_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "GetVeterinarians",
 			Handler:       _VetsBackend_GetVeterinarians_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "GetVeterinariansInLocation",
+			Handler:       _VetsBackend_GetVeterinariansInLocation_Handler,
 			ServerStreams: true,
 		},
 	},
