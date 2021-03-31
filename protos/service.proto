@@ -1,0 +1,89 @@
+syntax = "proto3";
+package beba_backend;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/ndirangug/vets-backend/protos";
+
+service BebaBackend {
+    rpc TestHello (TestHelloRequest) returns (TestHelloResponse);
+    rpc GetVeterinarians(VetRequest) returns (stream Veterinary);
+    rpc UpdateVeterian(Veterinary) returns (Veterinary);
+    rpc UpdateFarmer(Farmer) returns (Farmer);
+    rpc GetFarmer(FarmerRequest) returns (Farmer);
+    rpc ScheduleSession(TreatmentSession) returns (TreatmentSession);
+
+}
+
+message TestHelloRequest {
+    string name = 1;
+}
+
+message TestHelloResponse{
+    string response = 1;
+}
+
+message EmptyMessage{}
+
+message Veterinary{
+    string vetId = 10;
+    string title =11;
+    string firstName = 12;
+    string lastName = 13;
+    string email = 14;
+    string phone = 15;
+    Location address = 16;
+    string summary = 17;
+    repeated VetService services = 19;
+    bytes photo = 20;
+}
+
+message Location{
+    double lat = 1;
+    double long = 2;
+    string address = 3;
+}
+
+message VetService{
+    string serviceId = 10;
+    string title = 11;
+    string description = 12;
+    string unit = 13;
+    double costPerUnit = 14;
+
+}
+
+message VetRequest{
+    string vetId = 10;
+    string searchQuery = 11;
+    Location location = 12;
+}
+
+message Farmer{
+    string farmerId = 10;
+    string firstName = 11;
+    string lastName = 12;
+    string email = 13;
+    string phone = 15;
+    Location address = 16;
+    bytes photo = 17;
+}
+
+message FarmerRequest{
+    string farmerId = 1;
+    string email = 2;
+}
+
+message TreatmentSession{
+    string sessionId = 10;
+    google.protobuf.Timestamp time = 11;
+    Location location = 12;
+    string farmerId = 13;
+    string VeterinaryId = 14;
+    repeated VetService services = 15;
+    
+}
+
+
+
+
