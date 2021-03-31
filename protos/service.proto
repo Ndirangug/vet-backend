@@ -8,10 +8,13 @@ option go_package = "github.com/ndirangug/vets-backend/protos";
 service VetsBackend {
     rpc TestHello (TestHelloRequest) returns (TestHelloResponse);
     rpc GetVeterinarians(VetRequest) returns (stream Veterinary);
+    rpc GetVeterinarian(VetRequest) returns (Veterinary);
     rpc UpdateVeterian(Veterinary) returns (Veterinary);
     rpc UpdateFarmer(Farmer) returns (Farmer);
+    rpc CreateVeterian(Veterinary) returns (Veterinary);
+    rpc CreateFarmer(Farmer) returns (Farmer);
     rpc GetFarmer(FarmerRequest) returns (Farmer);
-    rpc ScheduleSession(TreatmentSession) returns (TreatmentSession);
+    rpc ScheduleSession(TreatmentSessionRequest) returns (TreatmentSession);
 
 }
 
@@ -26,7 +29,7 @@ message TestHelloResponse{
 message EmptyMessage{}
 
 message Veterinary{
-    string vetId = 10;
+    int32 vetId = 10;
     string title =11;
     string firstName = 12;
     string lastName = 13;
@@ -45,16 +48,20 @@ message Location{
 }
 
 message VetService{
-    string serviceId = 10;
+    int32 serviceId = 10;
     string title = 11;
     string description = 12;
     string unit = 13;
     double costPerUnit = 14;
+}
 
+message VetServiceRequest{
+    int32 serviceId = 10;
+    int32 units = 13;
 }
 
 message VetRequest{
-    string vetId = 10;
+    int32 vetId = 10;
     string searchQuery = 11;
     Location location = 12;
 }
@@ -75,15 +82,23 @@ message FarmerRequest{
 }
 
 message TreatmentSession{
-    string sessionId = 10;
+    int32 sessionId = 10;
     google.protobuf.Timestamp time = 11;
     Location location = 12;
-    string farmerId = 13;
-    string VeterinaryId = 14;
+    uint32 farmerId = 13;
+    uint32 VeterinaryId = 14;
     repeated VetService services = 15;
     
 }
 
+message TreatmentSessionRequest{
+    google.protobuf.Timestamp time = 11;
+    Location location = 12;
+    uint32 farmerId = 13;
+    uint32 VeterinaryId = 14;
+    repeated VetServiceRequest services = 15;
+    
+}
 
 
 

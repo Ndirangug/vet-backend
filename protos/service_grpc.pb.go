@@ -20,10 +20,13 @@ const _ = grpc.SupportPackageIsVersion7
 type VetsBackendClient interface {
 	TestHello(ctx context.Context, in *TestHelloRequest, opts ...grpc.CallOption) (*TestHelloResponse, error)
 	GetVeterinarians(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansClient, error)
+	GetVeterinarian(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (*Veterinary, error)
 	UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error)
 	UpdateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error)
+	CreateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error)
+	CreateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error)
 	GetFarmer(ctx context.Context, in *FarmerRequest, opts ...grpc.CallOption) (*Farmer, error)
-	ScheduleSession(ctx context.Context, in *TreatmentSession, opts ...grpc.CallOption) (*TreatmentSession, error)
+	ScheduleSession(ctx context.Context, in *TreatmentSessionRequest, opts ...grpc.CallOption) (*TreatmentSession, error)
 }
 
 type vetsBackendClient struct {
@@ -75,6 +78,15 @@ func (x *vetsBackendGetVeterinariansClient) Recv() (*Veterinary, error) {
 	return m, nil
 }
 
+func (c *vetsBackendClient) GetVeterinarian(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (*Veterinary, error) {
+	out := new(Veterinary)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/GetVeterinarian", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *vetsBackendClient) UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error) {
 	out := new(Veterinary)
 	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/UpdateVeterian", in, out, opts...)
@@ -93,6 +105,24 @@ func (c *vetsBackendClient) UpdateFarmer(ctx context.Context, in *Farmer, opts .
 	return out, nil
 }
 
+func (c *vetsBackendClient) CreateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error) {
+	out := new(Veterinary)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/CreateVeterian", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vetsBackendClient) CreateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error) {
+	out := new(Farmer)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/CreateFarmer", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *vetsBackendClient) GetFarmer(ctx context.Context, in *FarmerRequest, opts ...grpc.CallOption) (*Farmer, error) {
 	out := new(Farmer)
 	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/GetFarmer", in, out, opts...)
@@ -102,7 +132,7 @@ func (c *vetsBackendClient) GetFarmer(ctx context.Context, in *FarmerRequest, op
 	return out, nil
 }
 
-func (c *vetsBackendClient) ScheduleSession(ctx context.Context, in *TreatmentSession, opts ...grpc.CallOption) (*TreatmentSession, error) {
+func (c *vetsBackendClient) ScheduleSession(ctx context.Context, in *TreatmentSessionRequest, opts ...grpc.CallOption) (*TreatmentSession, error) {
 	out := new(TreatmentSession)
 	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/ScheduleSession", in, out, opts...)
 	if err != nil {
@@ -117,10 +147,13 @@ func (c *vetsBackendClient) ScheduleSession(ctx context.Context, in *TreatmentSe
 type VetsBackendServer interface {
 	TestHello(context.Context, *TestHelloRequest) (*TestHelloResponse, error)
 	GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error
+	GetVeterinarian(context.Context, *VetRequest) (*Veterinary, error)
 	UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error)
 	UpdateFarmer(context.Context, *Farmer) (*Farmer, error)
+	CreateVeterian(context.Context, *Veterinary) (*Veterinary, error)
+	CreateFarmer(context.Context, *Farmer) (*Farmer, error)
 	GetFarmer(context.Context, *FarmerRequest) (*Farmer, error)
-	ScheduleSession(context.Context, *TreatmentSession) (*TreatmentSession, error)
+	ScheduleSession(context.Context, *TreatmentSessionRequest) (*TreatmentSession, error)
 	mustEmbedUnimplementedVetsBackendServer()
 }
 
@@ -134,16 +167,25 @@ func (UnimplementedVetsBackendServer) TestHello(context.Context, *TestHelloReque
 func (UnimplementedVetsBackendServer) GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetVeterinarians not implemented")
 }
+func (UnimplementedVetsBackendServer) GetVeterinarian(context.Context, *VetRequest) (*Veterinary, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVeterinarian not implemented")
+}
 func (UnimplementedVetsBackendServer) UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateVeterian not implemented")
 }
 func (UnimplementedVetsBackendServer) UpdateFarmer(context.Context, *Farmer) (*Farmer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFarmer not implemented")
 }
+func (UnimplementedVetsBackendServer) CreateVeterian(context.Context, *Veterinary) (*Veterinary, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateVeterian not implemented")
+}
+func (UnimplementedVetsBackendServer) CreateFarmer(context.Context, *Farmer) (*Farmer, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFarmer not implemented")
+}
 func (UnimplementedVetsBackendServer) GetFarmer(context.Context, *FarmerRequest) (*Farmer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFarmer not implemented")
 }
-func (UnimplementedVetsBackendServer) ScheduleSession(context.Context, *TreatmentSession) (*TreatmentSession, error) {
+func (UnimplementedVetsBackendServer) ScheduleSession(context.Context, *TreatmentSessionRequest) (*TreatmentSession, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ScheduleSession not implemented")
 }
 func (UnimplementedVetsBackendServer) mustEmbedUnimplementedVetsBackendServer() {}
@@ -198,6 +240,24 @@ func (x *vetsBackendGetVeterinariansServer) Send(m *Veterinary) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _VetsBackend_GetVeterinarian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VetsBackendServer).GetVeterinarian(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vet_backend.VetsBackend/GetVeterinarian",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VetsBackendServer).GetVeterinarian(ctx, req.(*VetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _VetsBackend_UpdateVeterian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Veterinary)
 	if err := dec(in); err != nil {
@@ -234,6 +294,42 @@ func _VetsBackend_UpdateFarmer_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VetsBackend_CreateVeterian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Veterinary)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VetsBackendServer).CreateVeterian(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vet_backend.VetsBackend/CreateVeterian",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VetsBackendServer).CreateVeterian(ctx, req.(*Veterinary))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VetsBackend_CreateFarmer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Farmer)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VetsBackendServer).CreateFarmer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vet_backend.VetsBackend/CreateFarmer",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VetsBackendServer).CreateFarmer(ctx, req.(*Farmer))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _VetsBackend_GetFarmer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FarmerRequest)
 	if err := dec(in); err != nil {
@@ -253,7 +349,7 @@ func _VetsBackend_GetFarmer_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _VetsBackend_ScheduleSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TreatmentSession)
+	in := new(TreatmentSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -265,7 +361,7 @@ func _VetsBackend_ScheduleSession_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: "/vet_backend.VetsBackend/ScheduleSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VetsBackendServer).ScheduleSession(ctx, req.(*TreatmentSession))
+		return srv.(VetsBackendServer).ScheduleSession(ctx, req.(*TreatmentSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -282,12 +378,24 @@ var VetsBackend_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _VetsBackend_TestHello_Handler,
 		},
 		{
+			MethodName: "GetVeterinarian",
+			Handler:    _VetsBackend_GetVeterinarian_Handler,
+		},
+		{
 			MethodName: "UpdateVeterian",
 			Handler:    _VetsBackend_UpdateVeterian_Handler,
 		},
 		{
 			MethodName: "UpdateFarmer",
 			Handler:    _VetsBackend_UpdateFarmer_Handler,
+		},
+		{
+			MethodName: "CreateVeterian",
+			Handler:    _VetsBackend_CreateVeterian_Handler,
+		},
+		{
+			MethodName: "CreateFarmer",
+			Handler:    _VetsBackend_CreateFarmer_Handler,
 		},
 		{
 			MethodName: "GetFarmer",

@@ -8,12 +8,10 @@ import (
 
 type Session struct {
 	gorm.Model
-	date               time.Time
-	ServiceID          uint
-	Unit               string
-	ChargePerUnit      float64
+	Date               time.Time
 	Latitude           float64
 	Longitude          float64
 	FarmerID           uint
-	VetServiceSessions []VetServiceSession
+	VeterinaryID       uint
+	VetServiceSessions []*VetServiceSession
 }

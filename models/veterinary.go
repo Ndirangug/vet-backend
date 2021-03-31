@@ -7,10 +7,12 @@ type Veterinary struct {
 	Title       string
 	FirstName   string
 	LastName    string
+	Summary     string
 	Email       string `gorm:"unique"`
 	Phone       string `gorm:"unique"`
 	Address     string
 	Latitude    float64
 	Longitude   float64
 	VetServices []VetService
+	Sessions    []Session
 }
