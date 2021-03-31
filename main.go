@@ -26,7 +26,7 @@ func main() {
 
 	testService := service.NewBackendService(logger)
 	grpcServer := grpc.NewServer()
-	protos.RegisterBebaBackendServer(grpcServer, testService)
+	protos.RegisterVetsBackendServer(grpcServer, testService)
 	reflection.Register(grpcServer)
 
 	go func() {
@@ -41,7 +41,6 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	signal.Notify(c, os.Kill)
-
 
 	// Block until a signal is received.
 	sig := <-c

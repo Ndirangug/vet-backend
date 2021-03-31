@@ -1,11 +1,11 @@
 syntax = "proto3";
-package beba_backend;
+package vet_backend;
 
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/ndirangug/vets-backend/protos";
 
-service BebaBackend {
+service VetsBackend {
     rpc TestHello (TestHelloRequest) returns (TestHelloResponse);
     rpc GetVeterinarians(VetRequest) returns (stream Veterinary);
     rpc UpdateVeterian(Veterinary) returns (Veterinary);

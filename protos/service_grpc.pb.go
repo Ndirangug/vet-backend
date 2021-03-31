@@ -14,41 +14,41 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// BebaBackendClient is the client API for BebaBackend service.
+// VetsBackendClient is the client API for VetsBackend service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type BebaBackendClient interface {
+type VetsBackendClient interface {
 	TestHello(ctx context.Context, in *TestHelloRequest, opts ...grpc.CallOption) (*TestHelloResponse, error)
-	GetVeterinarians(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (BebaBackend_GetVeterinariansClient, error)
+	GetVeterinarians(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansClient, error)
 	UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error)
 	UpdateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error)
 	GetFarmer(ctx context.Context, in *FarmerRequest, opts ...grpc.CallOption) (*Farmer, error)
 	ScheduleSession(ctx context.Context, in *TreatmentSession, opts ...grpc.CallOption) (*TreatmentSession, error)
 }
 
-type bebaBackendClient struct {
+type vetsBackendClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewBebaBackendClient(cc grpc.ClientConnInterface) BebaBackendClient {
-	return &bebaBackendClient{cc}
+func NewVetsBackendClient(cc grpc.ClientConnInterface) VetsBackendClient {
+	return &vetsBackendClient{cc}
 }
 
-func (c *bebaBackendClient) TestHello(ctx context.Context, in *TestHelloRequest, opts ...grpc.CallOption) (*TestHelloResponse, error) {
+func (c *vetsBackendClient) TestHello(ctx context.Context, in *TestHelloRequest, opts ...grpc.CallOption) (*TestHelloResponse, error) {
 	out := new(TestHelloResponse)
-	err := c.cc.Invoke(ctx, "/beba_backend.BebaBackend/TestHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/TestHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *bebaBackendClient) GetVeterinarians(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (BebaBackend_GetVeterinariansClient, error) {
-	stream, err := c.cc.NewStream(ctx, &BebaBackend_ServiceDesc.Streams[0], "/beba_backend.BebaBackend/GetVeterinarians", opts...)
+func (c *vetsBackendClient) GetVeterinarians(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansClient, error) {
+	stream, err := c.cc.NewStream(ctx, &VetsBackend_ServiceDesc.Streams[0], "/vet_backend.VetsBackend/GetVeterinarians", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bebaBackendGetVeterinariansClient{stream}
+	x := &vetsBackendGetVeterinariansClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -58,16 +58,16 @@ func (c *bebaBackendClient) GetVeterinarians(ctx context.Context, in *VetRequest
 	return x, nil
 }
 
-type BebaBackend_GetVeterinariansClient interface {
+type VetsBackend_GetVeterinariansClient interface {
 	Recv() (*Veterinary, error)
 	grpc.ClientStream
 }
 
-type bebaBackendGetVeterinariansClient struct {
+type vetsBackendGetVeterinariansClient struct {
 	grpc.ClientStream
 }
 
-func (x *bebaBackendGetVeterinariansClient) Recv() (*Veterinary, error) {
+func (x *vetsBackendGetVeterinariansClient) Recv() (*Veterinary, error) {
 	m := new(Veterinary)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -75,233 +75,233 @@ func (x *bebaBackendGetVeterinariansClient) Recv() (*Veterinary, error) {
 	return m, nil
 }
 
-func (c *bebaBackendClient) UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error) {
+func (c *vetsBackendClient) UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error) {
 	out := new(Veterinary)
-	err := c.cc.Invoke(ctx, "/beba_backend.BebaBackend/UpdateVeterian", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/UpdateVeterian", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *bebaBackendClient) UpdateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error) {
+func (c *vetsBackendClient) UpdateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error) {
 	out := new(Farmer)
-	err := c.cc.Invoke(ctx, "/beba_backend.BebaBackend/UpdateFarmer", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/UpdateFarmer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *bebaBackendClient) GetFarmer(ctx context.Context, in *FarmerRequest, opts ...grpc.CallOption) (*Farmer, error) {
+func (c *vetsBackendClient) GetFarmer(ctx context.Context, in *FarmerRequest, opts ...grpc.CallOption) (*Farmer, error) {
 	out := new(Farmer)
-	err := c.cc.Invoke(ctx, "/beba_backend.BebaBackend/GetFarmer", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/GetFarmer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *bebaBackendClient) ScheduleSession(ctx context.Context, in *TreatmentSession, opts ...grpc.CallOption) (*TreatmentSession, error) {
+func (c *vetsBackendClient) ScheduleSession(ctx context.Context, in *TreatmentSession, opts ...grpc.CallOption) (*TreatmentSession, error) {
 	out := new(TreatmentSession)
-	err := c.cc.Invoke(ctx, "/beba_backend.BebaBackend/ScheduleSession", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/ScheduleSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// BebaBackendServer is the server API for BebaBackend service.
-// All implementations must embed UnimplementedBebaBackendServer
+// VetsBackendServer is the server API for VetsBackend service.
+// All implementations must embed UnimplementedVetsBackendServer
 // for forward compatibility
-type BebaBackendServer interface {
+type VetsBackendServer interface {
 	TestHello(context.Context, *TestHelloRequest) (*TestHelloResponse, error)
-	GetVeterinarians(*VetRequest, BebaBackend_GetVeterinariansServer) error
+	GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error
 	UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error)
 	UpdateFarmer(context.Context, *Farmer) (*Farmer, error)
 	GetFarmer(context.Context, *FarmerRequest) (*Farmer, error)
 	ScheduleSession(context.Context, *TreatmentSession) (*TreatmentSession, error)
-	mustEmbedUnimplementedBebaBackendServer()
+	mustEmbedUnimplementedVetsBackendServer()
 }
 
-// UnimplementedBebaBackendServer must be embedded to have forward compatible implementations.
-type UnimplementedBebaBackendServer struct {
+// UnimplementedVetsBackendServer must be embedded to have forward compatible implementations.
+type UnimplementedVetsBackendServer struct {
 }
 
-func (UnimplementedBebaBackendServer) TestHello(context.Context, *TestHelloRequest) (*TestHelloResponse, error) {
+func (UnimplementedVetsBackendServer) TestHello(context.Context, *TestHelloRequest) (*TestHelloResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TestHello not implemented")
 }
-func (UnimplementedBebaBackendServer) GetVeterinarians(*VetRequest, BebaBackend_GetVeterinariansServer) error {
+func (UnimplementedVetsBackendServer) GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetVeterinarians not implemented")
 }
-func (UnimplementedBebaBackendServer) UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error) {
+func (UnimplementedVetsBackendServer) UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateVeterian not implemented")
 }
-func (UnimplementedBebaBackendServer) UpdateFarmer(context.Context, *Farmer) (*Farmer, error) {
+func (UnimplementedVetsBackendServer) UpdateFarmer(context.Context, *Farmer) (*Farmer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFarmer not implemented")
 }
-func (UnimplementedBebaBackendServer) GetFarmer(context.Context, *FarmerRequest) (*Farmer, error) {
+func (UnimplementedVetsBackendServer) GetFarmer(context.Context, *FarmerRequest) (*Farmer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFarmer not implemented")
 }
-func (UnimplementedBebaBackendServer) ScheduleSession(context.Context, *TreatmentSession) (*TreatmentSession, error) {
+func (UnimplementedVetsBackendServer) ScheduleSession(context.Context, *TreatmentSession) (*TreatmentSession, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ScheduleSession not implemented")
 }
-func (UnimplementedBebaBackendServer) mustEmbedUnimplementedBebaBackendServer() {}
+func (UnimplementedVetsBackendServer) mustEmbedUnimplementedVetsBackendServer() {}
 
-// UnsafeBebaBackendServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to BebaBackendServer will
+// UnsafeVetsBackendServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to VetsBackendServer will
 // result in compilation errors.
-type UnsafeBebaBackendServer interface {
-	mustEmbedUnimplementedBebaBackendServer()
+type UnsafeVetsBackendServer interface {
+	mustEmbedUnimplementedVetsBackendServer()
 }
 
-func RegisterBebaBackendServer(s grpc.ServiceRegistrar, srv BebaBackendServer) {
-	s.RegisterService(&BebaBackend_ServiceDesc, srv)
+func RegisterVetsBackendServer(s grpc.ServiceRegistrar, srv VetsBackendServer) {
+	s.RegisterService(&VetsBackend_ServiceDesc, srv)
 }
 
-func _BebaBackend_TestHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _VetsBackend_TestHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TestHelloRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BebaBackendServer).TestHello(ctx, in)
+		return srv.(VetsBackendServer).TestHello(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/beba_backend.BebaBackend/TestHello",
+		FullMethod: "/vet_backend.VetsBackend/TestHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BebaBackendServer).TestHello(ctx, req.(*TestHelloRequest))
+		return srv.(VetsBackendServer).TestHello(ctx, req.(*TestHelloRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BebaBackend_GetVeterinarians_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _VetsBackend_GetVeterinarians_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(VetRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(BebaBackendServer).GetVeterinarians(m, &bebaBackendGetVeterinariansServer{stream})
+	return srv.(VetsBackendServer).GetVeterinarians(m, &vetsBackendGetVeterinariansServer{stream})
 }
 
-type BebaBackend_GetVeterinariansServer interface {
+type VetsBackend_GetVeterinariansServer interface {
 	Send(*Veterinary) error
 	grpc.ServerStream
 }
 
-type bebaBackendGetVeterinariansServer struct {
+type vetsBackendGetVeterinariansServer struct {
 	grpc.ServerStream
 }
 
-func (x *bebaBackendGetVeterinariansServer) Send(m *Veterinary) error {
+func (x *vetsBackendGetVeterinariansServer) Send(m *Veterinary) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func _BebaBackend_UpdateVeterian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _VetsBackend_UpdateVeterian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Veterinary)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BebaBackendServer).UpdateVeterian(ctx, in)
+		return srv.(VetsBackendServer).UpdateVeterian(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/beba_backend.BebaBackend/UpdateVeterian",
+		FullMethod: "/vet_backend.VetsBackend/UpdateVeterian",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BebaBackendServer).UpdateVeterian(ctx, req.(*Veterinary))
+		return srv.(VetsBackendServer).UpdateVeterian(ctx, req.(*Veterinary))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BebaBackend_UpdateFarmer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _VetsBackend_UpdateFarmer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Farmer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BebaBackendServer).UpdateFarmer(ctx, in)
+		return srv.(VetsBackendServer).UpdateFarmer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/beba_backend.BebaBackend/UpdateFarmer",
+		FullMethod: "/vet_backend.VetsBackend/UpdateFarmer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BebaBackendServer).UpdateFarmer(ctx, req.(*Farmer))
+		return srv.(VetsBackendServer).UpdateFarmer(ctx, req.(*Farmer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BebaBackend_GetFarmer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _VetsBackend_GetFarmer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FarmerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BebaBackendServer).GetFarmer(ctx, in)
+		return srv.(VetsBackendServer).GetFarmer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/beba_backend.BebaBackend/GetFarmer",
+		FullMethod: "/vet_backend.VetsBackend/GetFarmer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BebaBackendServer).GetFarmer(ctx, req.(*FarmerRequest))
+		return srv.(VetsBackendServer).GetFarmer(ctx, req.(*FarmerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BebaBackend_ScheduleSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _VetsBackend_ScheduleSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TreatmentSession)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BebaBackendServer).ScheduleSession(ctx, in)
+		return srv.(VetsBackendServer).ScheduleSession(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/beba_backend.BebaBackend/ScheduleSession",
+		FullMethod: "/vet_backend.VetsBackend/ScheduleSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BebaBackendServer).ScheduleSession(ctx, req.(*TreatmentSession))
+		return srv.(VetsBackendServer).ScheduleSession(ctx, req.(*TreatmentSession))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// BebaBackend_ServiceDesc is the grpc.ServiceDesc for BebaBackend service.
+// VetsBackend_ServiceDesc is the grpc.ServiceDesc for VetsBackend service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var BebaBackend_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "beba_backend.BebaBackend",
-	HandlerType: (*BebaBackendServer)(nil),
+var VetsBackend_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "vet_backend.VetsBackend",
+	HandlerType: (*VetsBackendServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "TestHello",
-			Handler:    _BebaBackend_TestHello_Handler,
+			Handler:    _VetsBackend_TestHello_Handler,
 		},
 		{
 			MethodName: "UpdateVeterian",
-			Handler:    _BebaBackend_UpdateVeterian_Handler,
+			Handler:    _VetsBackend_UpdateVeterian_Handler,
 		},
 		{
 			MethodName: "UpdateFarmer",
-			Handler:    _BebaBackend_UpdateFarmer_Handler,
+			Handler:    _VetsBackend_UpdateFarmer_Handler,
 		},
 		{
 			MethodName: "GetFarmer",
-			Handler:    _BebaBackend_GetFarmer_Handler,
+			Handler:    _VetsBackend_GetFarmer_Handler,
 		},
 		{
 			MethodName: "ScheduleSession",
-			Handler:    _BebaBackend_ScheduleSession_Handler,
+			Handler:    _VetsBackend_ScheduleSession_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "GetVeterinarians",
-			Handler:       _BebaBackend_GetVeterinarians_Handler,
+			Handler:       _VetsBackend_GetVeterinarians_Handler,
 			ServerStreams: true,
 		},
 	},

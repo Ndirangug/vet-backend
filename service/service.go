@@ -11,7 +11,7 @@ import (
 // Backend implements  grpc methods auto-generated from .proto file
 type BackendService struct {
 	logger *logger.TinyLogger
-	protos.UnimplementedBebaBackendServer
+	protos.UnimplementedVetsBackendServer
 }
 
 // TinyErpGrpc returns a new server
@@ -23,19 +23,39 @@ func (s *BackendService) TestHello(ctx context.Context, request *protos.TestHell
 	return &protos.TestHelloResponse{Response: fmt.Sprintf("Hello %s", request.Name)}, nil
 }
 
-func (s *BackendService) GetDrivers(EmptyMessage *protos.EmptyMessage, stream protos.BebaBackend_GetDriversServer) error {
-	drivers := []*protos.Driver{
-		{IdNumber: "6", FirstName: "George", LastName: "Ndirangu"},
-		{IdNumber: "7", FirstName: "Ndisho", LastName: "Heyy"},
-	}
+func (s *BackendService) GetVeterinarians(request *protos.VetRequest, stream protos.VetsBackend_GetVeterinariansServer) error {
+	vets := []*protos.Veterinary{}
 
-	for _, driver := range drivers {
+	for _, vet := range vets {
 
-		if err := stream.Send(driver); err != nil {
+		if err := stream.Send(vet); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
 
+func (s *BackendService) UpdateVeterian(ctx context.Context, vet *protos.Veterinary) (*protos.Veterinary, error) {
+	result := &protos.Veterinary{}
+
+	return result, nil
+}
+
+func (s *BackendService) UpdateFarmer(ctx context.Context, farmer *protos.Farmer) (*protos.Farmer, error) {
+	result := &protos.Farmer{}
+
+	return result, nil
+}
+
+func (s *BackendService) GetFarmer(ctx context.Context, request *protos.FarmerRequest) (*protos.Farmer, error) {
+	result := &protos.Farmer{}
+
+	return result, nil
+}
+
+func (s *BackendService) ScheduleSession(ctx context.Context, req *protos.TreatmentSession) (*protos.TreatmentSession, error) {
+	result := &protos.TreatmentSession{}
+
+	return result, nil
 }

@@ -10,6 +10,6 @@ reflect:
 
 
 # test:
-#     grpcurl --plaintext -d '{"name": "George"}'  localhost:50051 tiny_erp.TinyErpGrpc/TestHello
+#     grpcurl --plaintext -d '{"farmerId": "id", "email": "f@gmail.com"}'  localhost:50051 vet_backend.VetsBackend/GetFarmer
 
 
