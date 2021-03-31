@@ -69,9 +69,11 @@ func (s *BackendService) GetVeterinarians(request *protos.VetRequest, stream pro
 }
 
 func (s *BackendService) GetVeterinariansInLocation(location *protos.Location, stream protos.VetsBackend_GetVeterinariansInLocationServer) error {
-	var dbVets []models.Veterinary
+	dbVets, err := vetsWithinRadius(s, 5, location)
 
-	s.db.Conn.Where("latitude < ?", location.Lat).Find(&dbVets) //TODO USE SOMETHING LIKE DISTANCE VECTOR API HERE
+	if err != nil {
+		return err
+	}
 
 	for _, dbVet := range dbVets {
 		var services []*protos.VetService
@@ -159,4 +161,12 @@ func fetchServices(s *BackendService, vetId int) []*protos.VetService {
 	}
 
 	return services
+}
+
+func vetsWithinRadius(s *BackendService, radius float32, location *protos.Location) ([]*models.Veterinary, error) {
+	var dbVets []*models.Veterinary
+	//location -1.2947751295011405, 36.81682769654265
+	result := s.db.Conn.Raw("SELECT * FROM veterinaries WHERE ST_DWithin(ST_GeomFromText('POINT(? ?)', ?), veterinaries.location) ORDER BY ST_Distance (ST_GeomFromText('POINT(? ?)', ?), veterinaries.location)", location.Long, location.Lat, radius, location.Long, location.Lat, radius).Scan(&dbVets)
+
+	return dbVets, result.Error
 }
