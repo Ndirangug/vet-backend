@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/ndirangug/vets-backend/db"
 	"github.com/ndirangug/vets-backend/logger"
 	"github.com/ndirangug/vets-backend/protos"
 )
@@ -12,11 +13,18 @@ import (
 type BackendService struct {
 	logger *logger.TinyLogger
 	protos.UnimplementedVetsBackendServer
+	conn *db.DbConnection
 }
 
 // TinyErpGrpc returns a new server
 func NewBackendService(logger *logger.TinyLogger) *BackendService {
-	return &BackendService{logger: logger}
+	conn, err := db.NewDbConnection()
+
+	if err != nil {
+		logger.Panic("failed to connect to database. Err: %s", err)
+	}
+
+	return &BackendService{logger: logger, conn: conn}
 }
 
 func (s *BackendService) TestHello(ctx context.Context, request *protos.TestHelloRequest) (*protos.TestHelloResponse, error) {
