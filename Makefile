@@ -10,6 +10,7 @@ reflect:
 
 
 # test:
-#     grpcurl --plaintext -d '{"farmerId": "id", "email": "f@gmail.com"}'  localhost:50051 vet_backend.VetsBackend/GetFarmer
+#     grpcurl --plaintext -d '{"firstName":"", "lastName":"", "email":"", "phone":"", "address" :{"lat":-23.87876, "long": 36.678678676, "address": "nairobi"}, "photo": []}'  localhost:50051 vet_backend.VetsBackend/UpdateFarmer
+
 
 

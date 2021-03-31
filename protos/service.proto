@@ -60,7 +60,7 @@ message VetRequest{
 }
 
 message Farmer{
-    string farmerId = 10;
+    int32 farmerId = 10;
     string firstName = 11;
     string lastName = 12;
     string email = 13;
@@ -70,7 +70,7 @@ message Farmer{
 }
 
 message FarmerRequest{
-    string farmerId = 1;
+    int32 farmerId = 1;
     string email = 2;
 }
 

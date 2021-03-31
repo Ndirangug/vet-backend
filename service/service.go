@@ -6,6 +6,7 @@ import (
 
 	"github.com/ndirangug/vets-backend/db"
 	"github.com/ndirangug/vets-backend/logger"
+	"github.com/ndirangug/vets-backend/models"
 	"github.com/ndirangug/vets-backend/protos"
 )
 
@@ -13,7 +14,7 @@ import (
 type BackendService struct {
 	logger *logger.TinyLogger
 	protos.UnimplementedVetsBackendServer
-	conn *db.DbConnection
+	db *db.DbConnection
 }
 
 // TinyErpGrpc returns a new server
@@ -24,7 +25,7 @@ func NewBackendService(logger *logger.TinyLogger) *BackendService {
 		logger.Panic("failed to connect to database. Err: %s", err)
 	}
 
-	return &BackendService{logger: logger, conn: conn}
+	return &BackendService{logger: logger, db: conn}
 }
 
 func (s *BackendService) TestHello(ctx context.Context, request *protos.TestHelloRequest) (*protos.TestHelloResponse, error) {
@@ -51,9 +52,13 @@ func (s *BackendService) UpdateVeterian(ctx context.Context, vet *protos.Veterin
 }
 
 func (s *BackendService) UpdateFarmer(ctx context.Context, farmer *protos.Farmer) (*protos.Farmer, error) {
-	result := &protos.Farmer{}
+	dbFarmer := &models.Farmer{FirstName: farmer.FirstName, LastName: farmer.LastName, Email: farmer.Email, Phone: farmer.Phone, Address: farmer.Address.Address, Longitude: farmer.Address.Long, Latitude: farmer.Address.Lat}
 
-	return result, nil
+	result := s.db.Conn.Create(&dbFarmer)
+
+	farmer.FarmerId = int32(dbFarmer.ID)
+
+	return farmer, result.Error
 }
 
 func (s *BackendService) GetFarmer(ctx context.Context, request *protos.FarmerRequest) (*protos.Farmer, error) {

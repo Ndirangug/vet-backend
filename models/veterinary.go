@@ -7,8 +7,8 @@ type Veterinary struct {
 	Title       string
 	FirstName   string
 	LastName    string
-	Email       string
-	Phone       string
+	Email       string `gorm:"unique"`
+	Phone       string `gorm:"unique"`
 	Address     string
 	Latitude    float64
 	Longitude   float64
