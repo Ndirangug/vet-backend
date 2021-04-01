@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// Backend implements  grpc methods auto-generated from .proto file
+// BackendService implements  grpc methods auto-generated from .proto file
 type BackendService struct {
 	logger *logger.TinyLogger
 	protos.UnimplementedVetsBackendServer

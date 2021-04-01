@@ -1,11 +1,11 @@
-package main
+package cmd
 
 import (
 	"github.com/ndirangug/vets-backend/db"
 	"github.com/ndirangug/vets-backend/models"
 )
 
-func main() {
+func Migrate() {
 	db, err := db.NewDbConnection()
 
 	if err != nil {
