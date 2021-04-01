@@ -68,8 +68,8 @@ func (s *BackendService) GetVeterinarians(request *protos.VetRequest, stream pro
 	return nil
 }
 
-func (s *BackendService) GetVeterinariansInLocation(location *protos.Location, stream protos.VetsBackend_GetVeterinariansInLocationServer) error {
-	dbVets, err := vetsWithinRadius(s, 5, location)
+func (s *BackendService) GetVeterinariansInLocation(req *protos.LocationRequest, stream protos.VetsBackend_GetVeterinariansInLocationServer) error {
+	dbVets, err := vetsWithinRadius(s, req.Radius, req.Location)
 
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func (s *BackendService) CreateVeterian(ctx context.Context, vet *protos.Veterin
 	return vet, result.Error
 }
 
-func (s *BackendService) UpdateVeterian(ctx context.Context, vet *protos.Veterinary) (*protos.Veterinary, error) {
+func (s *BackendService) UpdateVeterinarian(ctx context.Context, vet *protos.Veterinary) (*protos.Veterinary, error) {
 	dbVet := &models.Veterinary{Model: gorm.Model{ID: uint(vet.VetId), UpdatedAt: time.Now()}, FirstName: vet.FirstName, LastName: vet.LastName, Email: vet.Email, Phone: vet.Phone, Address: vet.Address.Address, Longitude: vet.Address.Long, Latitude: vet.Address.Lat}
 
 	result := s.db.Conn.UpdateColumns(&dbVet)
@@ -141,11 +141,13 @@ func (s *BackendService) ScheduleSession(ctx context.Context, req *protos.Treatm
 	for _, service := range req.Services {
 		vetServiceSessions = append(vetServiceSessions, &models.VetServiceSession{VetServiceID: uint(service.ServiceId), Units: uint(service.Units)})
 	}
-	dbSession := &models.Session{Date: req.Time.AsTime(), Latitude: req.Location.Lat, Longitude: req.Location.Long, FarmerID: uint(req.FarmerId), VeterinaryID: uint(req.VeterinaryId), VetServiceSessions: vetServiceSessions}
+
+	dbSession := &models.Session{Date: time.Now(), Latitude: req.Location.Lat, Longitude: req.Location.Long, FarmerID: uint(req.FarmerId), VeterinaryID: uint(req.VeterinaryId), VetServiceSessions: vetServiceSessions}
 
 	result := s.db.Conn.Create(&dbSession)
 
 	session := &protos.TreatmentSession{SessionId: int32(dbSession.ID), Time: timestamppb.New(dbSession.Date), Location: &protos.Location{Lat: dbSession.Latitude, Long: dbSession.Longitude}, FarmerId: uint32(dbSession.FarmerID), VeterinaryId: uint32(dbSession.VeterinaryID)}
+
 	return session, result.Error
 }
 
@@ -166,7 +168,8 @@ func fetchServices(s *BackendService, vetId int) []*protos.VetService {
 func vetsWithinRadius(s *BackendService, radius float32, location *protos.Location) ([]*models.Veterinary, error) {
 	var dbVets []*models.Veterinary
 	//location -1.2947751295011405, 36.81682769654265
-	result := s.db.Conn.Raw("SELECT * FROM veterinaries WHERE ST_DWithin(ST_GeomFromText('POINT(? ?)', ?), veterinaries.location) ORDER BY ST_Distance (ST_GeomFromText('POINT(? ?)', ?), veterinaries.location)", location.Long, location.Lat, radius, location.Long, location.Lat, radius).Scan(&dbVets)
+	query := fmt.Sprintf("SELECT * FROM public.veterinaries WHERE ST_DWithin(ST_GeomFromText('POINT(' || veterinaries.longitude || ' ' || veterinaries.latitude ||')'), ST_GeomFromText('POINT(%f %f)'), %f);", location.Long, location.Lat, radius)
+	result := s.db.Conn.Raw(query).Scan(&dbVets)
 
 	return dbVets, result.Error
 }

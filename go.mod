@@ -3,6 +3,8 @@ module github.com/ndirangug/vets-backend
 go 1.15
 
 require (
+	github.com/cridenour/go-postgis v1.0.0 // indirect
+	github.com/dewski/spatial v0.0.0-20190810150435-8df499de4abf
 	github.com/golang/protobuf v1.4.3
 	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
 	github.com/jinzhu/now v1.1.2 // indirect

@@ -20,9 +20,9 @@ const _ = grpc.SupportPackageIsVersion7
 type VetsBackendClient interface {
 	TestHello(ctx context.Context, in *TestHelloRequest, opts ...grpc.CallOption) (*TestHelloResponse, error)
 	GetVeterinarians(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansClient, error)
-	GetVeterinariansInLocation(ctx context.Context, in *Location, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansInLocationClient, error)
+	GetVeterinariansInLocation(ctx context.Context, in *LocationRequest, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansInLocationClient, error)
 	GetVeterinarian(ctx context.Context, in *VetRequest, opts ...grpc.CallOption) (*Veterinary, error)
-	UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error)
+	UpdateVeterinarian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error)
 	UpdateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error)
 	CreateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error)
 	CreateFarmer(ctx context.Context, in *Farmer, opts ...grpc.CallOption) (*Farmer, error)
@@ -79,7 +79,7 @@ func (x *vetsBackendGetVeterinariansClient) Recv() (*Veterinary, error) {
 	return m, nil
 }
 
-func (c *vetsBackendClient) GetVeterinariansInLocation(ctx context.Context, in *Location, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansInLocationClient, error) {
+func (c *vetsBackendClient) GetVeterinariansInLocation(ctx context.Context, in *LocationRequest, opts ...grpc.CallOption) (VetsBackend_GetVeterinariansInLocationClient, error) {
 	stream, err := c.cc.NewStream(ctx, &VetsBackend_ServiceDesc.Streams[1], "/vet_backend.VetsBackend/GetVeterinariansInLocation", opts...)
 	if err != nil {
 		return nil, err
@@ -120,9 +120,9 @@ func (c *vetsBackendClient) GetVeterinarian(ctx context.Context, in *VetRequest,
 	return out, nil
 }
 
-func (c *vetsBackendClient) UpdateVeterian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error) {
+func (c *vetsBackendClient) UpdateVeterinarian(ctx context.Context, in *Veterinary, opts ...grpc.CallOption) (*Veterinary, error) {
 	out := new(Veterinary)
-	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/UpdateVeterian", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/vet_backend.VetsBackend/UpdateVeterinarian", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -180,9 +180,9 @@ func (c *vetsBackendClient) ScheduleSession(ctx context.Context, in *TreatmentSe
 type VetsBackendServer interface {
 	TestHello(context.Context, *TestHelloRequest) (*TestHelloResponse, error)
 	GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error
-	GetVeterinariansInLocation(*Location, VetsBackend_GetVeterinariansInLocationServer) error
+	GetVeterinariansInLocation(*LocationRequest, VetsBackend_GetVeterinariansInLocationServer) error
 	GetVeterinarian(context.Context, *VetRequest) (*Veterinary, error)
-	UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error)
+	UpdateVeterinarian(context.Context, *Veterinary) (*Veterinary, error)
 	UpdateFarmer(context.Context, *Farmer) (*Farmer, error)
 	CreateVeterian(context.Context, *Veterinary) (*Veterinary, error)
 	CreateFarmer(context.Context, *Farmer) (*Farmer, error)
@@ -201,14 +201,14 @@ func (UnimplementedVetsBackendServer) TestHello(context.Context, *TestHelloReque
 func (UnimplementedVetsBackendServer) GetVeterinarians(*VetRequest, VetsBackend_GetVeterinariansServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetVeterinarians not implemented")
 }
-func (UnimplementedVetsBackendServer) GetVeterinariansInLocation(*Location, VetsBackend_GetVeterinariansInLocationServer) error {
+func (UnimplementedVetsBackendServer) GetVeterinariansInLocation(*LocationRequest, VetsBackend_GetVeterinariansInLocationServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetVeterinariansInLocation not implemented")
 }
 func (UnimplementedVetsBackendServer) GetVeterinarian(context.Context, *VetRequest) (*Veterinary, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVeterinarian not implemented")
 }
-func (UnimplementedVetsBackendServer) UpdateVeterian(context.Context, *Veterinary) (*Veterinary, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateVeterian not implemented")
+func (UnimplementedVetsBackendServer) UpdateVeterinarian(context.Context, *Veterinary) (*Veterinary, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateVeterinarian not implemented")
 }
 func (UnimplementedVetsBackendServer) UpdateFarmer(context.Context, *Farmer) (*Farmer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFarmer not implemented")
@@ -278,7 +278,7 @@ func (x *vetsBackendGetVeterinariansServer) Send(m *Veterinary) error {
 }
 
 func _VetsBackend_GetVeterinariansInLocation_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(Location)
+	m := new(LocationRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -316,20 +316,20 @@ func _VetsBackend_GetVeterinarian_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VetsBackend_UpdateVeterian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _VetsBackend_UpdateVeterinarian_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Veterinary)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VetsBackendServer).UpdateVeterian(ctx, in)
+		return srv.(VetsBackendServer).UpdateVeterinarian(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/vet_backend.VetsBackend/UpdateVeterian",
+		FullMethod: "/vet_backend.VetsBackend/UpdateVeterinarian",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VetsBackendServer).UpdateVeterian(ctx, req.(*Veterinary))
+		return srv.(VetsBackendServer).UpdateVeterinarian(ctx, req.(*Veterinary))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -440,8 +440,8 @@ var VetsBackend_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _VetsBackend_GetVeterinarian_Handler,
 		},
 		{
-			MethodName: "UpdateVeterian",
-			Handler:    _VetsBackend_UpdateVeterian_Handler,
+			MethodName: "UpdateVeterinarian",
+			Handler:    _VetsBackend_UpdateVeterinarian_Handler,
 		},
 		{
 			MethodName: "UpdateFarmer",

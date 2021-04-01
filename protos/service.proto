@@ -8,9 +8,9 @@ option go_package = "github.com/ndirangug/vets-backend/protos";
 service VetsBackend {
     rpc TestHello (TestHelloRequest) returns (TestHelloResponse);
     rpc GetVeterinarians(VetRequest) returns (stream Veterinary);
-    rpc GetVeterinariansInLocation(Location) returns(stream Veterinary);
+    rpc GetVeterinariansInLocation(LocationRequest) returns(stream Veterinary);
     rpc GetVeterinarian(VetRequest) returns (Veterinary);
-    rpc UpdateVeterian(Veterinary) returns (Veterinary);
+    rpc UpdateVeterinarian(Veterinary) returns (Veterinary);
     rpc UpdateFarmer(Farmer) returns (Farmer);
     rpc CreateVeterian(Veterinary) returns (Veterinary);
     rpc CreateFarmer(Farmer) returns (Farmer);
@@ -46,6 +46,11 @@ message Location{
     double lat = 1;
     double long = 2;
     string address = 3;
+}
+
+message LocationRequest{
+    Location location = 1;
+    float radius = 2;
 }
 
 message VetService{
