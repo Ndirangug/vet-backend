@@ -1,0 +1,7 @@
+id,created_at,updated_at,deleted_at,title,first_name,last_name,summary,email,phone,address,latitude,longitude
+2,,,,Mr,George,Ndirangu,,,,,,
+3,,,,,,,,,,,,
+1,,,,Mr,George,,,,,,,
+4,,,,,George,,,,,,-1.291804,36.822632
+5,,,,,George,,,,,,-2.291085,36.821784
+6,,,,,George,,,,,,-1.2939599460360305,36.799532813964184
