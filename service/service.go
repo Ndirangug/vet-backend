@@ -50,7 +50,12 @@ func (s *BackendService) GetVeterinarian(ctx context.Context, request *protos.Ve
 func (s *BackendService) GetVeterinarians(request *protos.VetRequest, stream protos.VetsBackend_GetVeterinariansServer) error {
 	var dbVets []models.Veterinary
 
-	result := s.db.Conn.Where("first_name = ?", request.SearchQuery).Find(&dbVets)
+	var result *gorm.DB
+	if request.SearchQuery != "" {
+		result = s.db.Conn.Where("first_name = ?", request.SearchQuery).Find(&dbVets)
+	} else {
+		result = s.db.Conn.Find(&dbVets)
+	}
 
 	if result.Error != nil {
 		s.logger.Info("Record not found, %s", result.Error)
