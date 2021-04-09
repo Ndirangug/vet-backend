@@ -14,10 +14,14 @@ import (
 
 func Serve() {
 
-	//port = ":50051"
-	port := os.Getenv("GRPC_PORT")
-
 	logger := logger.NewTinyLogger()
+
+	//port = ":50051"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		logger.Info("Defaulting to port %s", port)
+	}
 
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
