@@ -1,1 +1,1 @@
-web: go run main.go serve
+web: ./bin/vets-backend serve
