@@ -13,9 +13,9 @@ import (
 )
 
 func Serve() {
-	const (
-		port = ":50051"
-	)
+
+	//port = ":50051"
+	port := os.Getenv("GRPC_PORT")
 
 	logger := logger.NewTinyLogger()
 

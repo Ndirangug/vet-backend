@@ -1,13 +1,19 @@
-generate:
-	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/service.proto
+serve:
+	export DATABASE_URL=postgres://rhdktlxtufaaoe:22971c5d488da6a8e27011251b24f2d99eff8af796deeaaec49b13efb557330c@ec2-52-1-115-6.compute-1.amazonaws.com:5432/da5kla8im8n293 && export GRPC_PORT=:50051 && go run main.go serve
 
-# serve:
-#     go run main.go serve
+# generate:
+# 	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/service.proto
 
-reflect:
-    grpcurl --plaintext localhost:50051 list
+ 		
 
+# reflect:
+#     grpcurl --plaintext localhost:50051 list
 
+# push_db:
+# 	heroku pg:push vets DATABASE_URL --app vets-backend
+
+# pg_credentials:
+# 	heroku pg:credentials:url DATABASE --app vets-backend
 
 
 # test:
