@@ -17,7 +17,7 @@ func Serve() {
 	logger := logger.NewTinyLogger()
 
 	//port = ":50051"
-	port := os.Getenv("PORT")
+	port := os.Getenv("GRPC_PORT")
 	if port == "" {
 		port = "8080"
 		logger.Info("Defaulting to port %s", port)
