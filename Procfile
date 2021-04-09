@@ -1,1 +1,1 @@
-web: bin/vets-backend serve
+web: ./bin/vets-backend serve
