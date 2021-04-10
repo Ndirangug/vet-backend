@@ -19,7 +19,7 @@ func Serve() {
 	//port = ":50051"
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = ":8080"
 		logger.Info("Defaulting to port %s", port)
 	}
 
