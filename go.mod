@@ -3,6 +3,7 @@ module github.com/ndirangug/vets-backend
 go 1.15
 
 require (
+	github.com/bxcodec/faker/v3 v3.6.0
 	github.com/cridenour/go-postgis v1.0.0 // indirect
 	github.com/dewski/spatial v0.0.0-20190810150435-8df499de4abf
 	github.com/fullstorydev/grpcui v1.1.0 // indirect
