@@ -9,7 +9,7 @@ push_db:
 
 serve:
 	export DATABASE_URL=postgres://rhdktlxtufaaoe:22971c5d488da6a8e27011251b24f2d99eff8af796deeaaec49b13efb557330c@ec2-52-1-115-6.compute-1.amazonaws.com:5432/da5kla8im8n293 && \
-	export PORT=:50051 && \
+	export PORT=50051 && \
 	go run main.go serve
 
 seed:
