@@ -19,7 +19,7 @@ The [grpcurl](https://github.com/fullstorydev/grpcurl) tool may be used to send 
 $ grpcurl  vet-backend-fybfguvuua-uc.a.run.app:443 list
 
 # example get a veterinry officers within  given radius of a particular location
-$ grpcurl  -d '{"location":{"lat":-1.2939599460360305, "long": 36.799532813964184}, "radius": 300}'  vet-backend-fybfguvuua-uc.a.run.app:443 vet_backend.VetsBackend/GetVeterinariansInLocation
+$ grpcurl  -d '{"location":{"lat":-1.2939299460360305, "long": 36.799532813964184}, "radius": 300}'  vet-backend-fybfguvuua-uc.a.run.app:443 vet_backend.VetsBackend/GetVeterinariansInLocation
 ```
 The [grpui](https://github.com/fullstorydev/grpcurl) tool may also be used to graphicly explore the service and play with it
 ```bash
