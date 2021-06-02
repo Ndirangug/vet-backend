@@ -47,5 +47,5 @@ migrate:
 #     grpcurl --plaintext -d '{"location":{"lat":-1.2939599460360305, "long": 36.799532813964184}, "radius": 300}'  localhost:50051 vet_backend.VetsBackend/GetVeterinariansInLocation
 #     grpcurl --plaintext -d '{"location":{"lat":-1.2939599460360305, "long": 36.799532813964184}, "radius": 300}' vet-backend-fybfguvuua-uc.a.run.app:443 vet_backend.VetsBackend/GetVeterinariansInLocation
 #     grpcurl  -d '{"location":{"lat":-1.2939599460360305, "long": 36.799532813964184}, "radius": 300}'  vet-backend-fybfguvuua-uc.a.run.app:443 vet_backend.VetsBackend/GetVeterinariansInLocation
-#	grpcurl  vet-backend-fybfguvuua-uc.a.run.app:50051 list
+#	grpcurl  vet-backend-u6wijjyqaa-uc.a.run.app:443 list
 #	grpcui  vet-backend-fybfguvuua-uc.a.run.app:50051
